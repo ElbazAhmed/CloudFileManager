@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,15 +16,17 @@ export class RegisterComponent {
   email: string = '';
   password: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   async register() {
     if (this.email && this.password && this.username) {
       await this.authService.register(this.email, this.password, this.username);
+      this.router.navigate(['/login']);
     }
   }
 
   async googleSignIn() {
       await this.authService.googleSignIn();
+      this.router.navigate(['']);
   }
 }

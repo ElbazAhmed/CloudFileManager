@@ -1,0 +1,19 @@
+<div class="nav">
+    <div class="navbar_title">CloudFileManager</div>
+</div>
+<div class="register_home">
+    <h2>Log in or Sign up</h2>
+    <form (ngSubmit)="login()" class="register_form">
+        <div class="register_form-input">
+            <label for="email">Email:</label>
+            <input type="email" [(ngModel)]="email" name="email" required />
+        </div>
+        <div class="register_form-input">
+            <label for="password">Password:</label>
+            <input type="password" [(ngModel)]="password" name="password" required />
+        </div>
+        <button type="submit" class="register_form-button">Log in</button>
+    </form>
+    <p>--------------------------- or ---------------------------</p>
+    <div (click)="googleSignIn()" class="sign_google"><img class="logo_google" src="../../../assets/logo-google.svg" alt="logo_google"><p>Continue with Google</p></div>
+</div>

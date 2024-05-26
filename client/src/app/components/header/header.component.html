@@ -1,7 +1,9 @@
 <div class="nav">
     <div class="navbar_title">CloudFileManager</div>
     <div class="navbar_buttons">
-        <button class="navbar_button">Log in</button>
-        <button class="navbar_button signup" routerLink="/register">Sign up</button>
+        <button class="navbar_button" routerLink="/login" *ngIf="!(authService.isLoggedIn | async)">Log in</button>
+        <button class="navbar_button signup" routerLink="/register" *ngIf="!(authService.isLoggedIn | async)">Sign up</button>
+        <button class="navbar_button signup" *ngIf="authService.isLoggedIn | async" (click)="logout()">Log out</button>
     </div>
 </div>
+
