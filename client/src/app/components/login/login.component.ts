@@ -19,13 +19,13 @@ export class LoginComponent {
   async login() {
     if(this.email && this.password){
       await this.authService.login(this.email,this.password);
-      this.router.navigate(['']);
+      this.router.navigate(['/dashboard']);
     }
   }
 
   async googleSignIn() {
     await this.authService.googleSignIn();
-    this.router.navigate(['']);
+    this.router.navigate(['/dashboard']);
   }
   
 }

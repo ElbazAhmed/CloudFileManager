@@ -1,0 +1,22 @@
+<app-header></app-header>
+<div class="home">
+  <div class="sidebar">
+    <ul>
+      <li *ngFor="let file of userFiles$ | async">
+        <a [href]="file.url" target="_blank">{{ file.name }}</a>
+      </li>
+    </ul>
+  </div>
+  <div class="content">
+    <div class="file-input-container">
+      <input class="file-input" type="file" (change)="chooseFile($event)" />
+      <button (click)="addData()" [disabled]="!file">Upload</button>
+    </div>
+    <div *ngIf="downloadURL$ | async as downloadURL">
+      <p>File available at: <a [href]="downloadURL" target="_blank">{{ downloadURL }}</a></p>
+    </div>
+  </div>
+</div>
+
+  
+  
