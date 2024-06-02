@@ -3,6 +3,9 @@
     <div class="navbar_buttons">
         <button class="navbar_button" routerLink="/login" *ngIf="!(authService.isLoggedIn | async)">Log in</button>
         <button class="navbar_button signup" routerLink="/register" *ngIf="!(authService.isLoggedIn | async)">Sign up</button>
+        <div class="profile_avatar" *ngIf="authService.isLoggedIn | async"
+     [ngStyle]="{'background-image': profileUrl ? 'url(' + profileUrl + ')' : 'url(' + defaultProfile + ')'}"
+     [routerLink]="'/profile/' + uid"></div>
         <button class="navbar_button signup" *ngIf="authService.isLoggedIn | async" (click)="logout()">Log out</button>
     </div>
 </div>

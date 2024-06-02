@@ -1,1 +1,37 @@
-<p>profile works!</p>
+<!-- profile.component.html -->
+<app-header></app-header>
+<div class="profile_content">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="form-content">
+        <div class="image-section">
+            <div>
+                <img [src]="profileForm.get('profileUrl')?.value || defaultProfile" alt="Profile Picture" class="profile_pic">
+            </div> 
+            <div >
+                <input type="file" (change)="onFileSelected($event)">
+            </div>
+        </div>
+        <div class="proflie-infos">
+            <div class="form-div">
+                <label for="email" class="form-label">Email:</label>
+                <input id="email" formControlName="email" readonly class="form-div-input">
+              </div>
+              <div class="form-div">
+                <label for="firstName" class="form-label">First Name:</label>
+                <input id="firstName" formControlName="firstName" class="form-div-input">
+              </div>
+              <div class="form-div">
+                <label for="lastName" class="form-label">Last Name:</label>
+                <input id="lastName" formControlName="lastName" class="form-div-input">
+              </div>
+              <div class="form-div">
+                <label for="phoneNumber" class="form-label">Phone Number:</label>
+                <input id="phoneNumber" formControlName="phoneNumber" class="form-div-input">
+              </div>
+              <div class="form-div">
+                <button type="submit" class="submit_button">Update Profile</button>
+              </div>
+        </div>
+    </form>
+</div>
+
+

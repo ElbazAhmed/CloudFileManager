@@ -1,6 +1,7 @@
 <app-header></app-header>
 <div class="home">
   <div class="sidebar">
+    <div class="sidebarTitle">Your Uploaded Files:</div>
     <ul>
       <li *ngFor="let file of userFiles$ | async">
         <a [href]="file.url" target="_blank">{{ file.name }}</a>
