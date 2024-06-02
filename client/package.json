@@ -22,6 +22,8 @@
     "@angular/platform-browser-dynamic": "^17.0.0",
     "@angular/router": "^17.0.0",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
+    "@ng-icons/core": "^27.5.2",
+    "@ng-icons/heroicons": "^27.5.2",
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.2",
     "ngx-awesome-uploader": "^17.1.0",

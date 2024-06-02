@@ -2,19 +2,39 @@
 <div class="home">
   <div class="sidebar">
     <div class="sidebarTitle">Your Uploaded Files:</div>
-    <ul>
-      <li *ngFor="let file of userFiles$ | async">
-        <a [href]="file.url" target="_blank">{{ file.name }}</a>
-      </li>
-    </ul>
+    <div class="files-container">
+      <div *ngFor="let file of userFiles$ | async" class="file_div-cont">
+        <div class="file_div">
+          <div class="file_div-name">{{ file.name }}</div>
+          <div class="file_div-icons">
+            <img class="file_div-icon" (click)="deleteFile(file)"  src="https://cdn-icons-png.freepik.com/512/3807/3807871.png" alt="copy file link">
+            <img class="file_div-icon" (click)="copyLink(file.url)"  src="https://cdn-icons-png.freepik.com/256/6994/6994770.png?semt=ais_hybrid" alt="copy file link">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="content">
+    <div>Available Storage / 1 GB</div>
+    <div class="progress">
+        <div class="progress-bar" [style.width]="totalSizePercentage$ | async">
+          {{ totalSize$ | async | bytes}}
+        </div>
+    </div>
     <div class="file-input-container">
       <input class="file-input" type="file" (change)="chooseFile($event)" />
-      <button (click)="addData()" [disabled]="!file">Upload</button>
+      <div>
+        <img src="https://receivefiles.de/assets/images/mini-logo.png" alt="uplod file" class="upload-logo">
+        <p>Drag and Drop or Click to Select a File</p>
+        <p *ngIf="file">Selected File : <span class="filename">{{file.name}}</span></p>
+      </div>
+      <div *ngIf="uploadProgress$ | async as progress">
+        <progress max="100" [value]="progress"></progress>
+      </div>
     </div>
+    <button (click)="addData()" [disabled]="!file" [ngStyle]="{'background-color': file ? '#0057E5' : 'grey'}" class="upload-button">Upload</button>
     <div *ngIf="downloadURL$ | async as downloadURL">
-      <p>File available at: <a [href]="downloadURL" target="_blank">{{ downloadURL }}</a></p>
+      <p>Your File <span class="filename">{{file!.name}}</span> is available at this link: <img (click)="copyLink(downloadURL)" class="file_div-icon" src="https://cdn-icons-png.freepik.com/256/6994/6994770.png?semt=ais_hybrid" alt="copy file link"></p>
     </div>
   </div>
 </div>

@@ -6,7 +6,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { async, filter, map, switchMap } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { UserProfile } from '../../shared/user-profile.model';
+import { UserProfile } from '../../models/user-profile.model';
 
 
 @Component({

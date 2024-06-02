@@ -7,18 +7,22 @@ import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 import { switchMap, filter } from 'rxjs/operators';
 import { FileUpload } from '../../models/file-upload.model';
+import { NgIconComponent, provideIcons } from '@ng-icons/core';
+import { heroLink } from '@ng-icons/heroicons/outline';
+import { BytesPipe } from '../../shared/bytes-pipe.pipe';
 
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatProgressBarModule, NgIf, CommonModule, HeaderComponent, NgFor],
+  imports: [MatProgressBarModule, NgIf, CommonModule, HeaderComponent, NgFor, NgIconComponent, BytesPipe],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
+  viewProviders: [provideIcons({ heroLink })],
 })
 
 
@@ -27,6 +31,9 @@ export class DashboardComponent implements OnInit{
   uploadProgress$!: Observable<number | undefined>;
   downloadURL$!: Observable<string | null>;
   userFiles$!: Observable<any[]>;
+  totalSize$!: Observable<number>;
+  totalSizePercentage$!: Observable<string>;
+  private readonly MAX_STORAGE_SIZE = 1024 * 1024 * 1024; // 1 GB in bytes
 
   constructor(
     private storage: AngularFireStorage,
@@ -62,7 +69,7 @@ export class DashboardComponent implements OnInit{
   
             const user = await this.auth.currentUser;
             if (user) {
-              const fileUpload = new FileUpload(this.file!.name, downloadURL, user.uid);
+              const fileUpload = new FileUpload(this.file!.name, downloadURL, user.uid, this.file!.size);
   
               // Store file metadata in Firestore under 'uploads' collection
               await this.db.collection('uploads').add(Object.assign({}, fileUpload));
@@ -75,6 +82,9 @@ export class DashboardComponent implements OnInit{
             }
           } catch (error) {
             console.error('Error during file upload and metadata saving:', error);
+          } finally {
+            // Reset the file input after upload is completed
+            this.file = undefined;
           }
         })
       ).subscribe({
@@ -103,6 +113,11 @@ export class DashboardComponent implements OnInit{
         return this.db.collection('uploads', ref => ref.where('uid', '==', user!.uid)).valueChanges();
       })
     );
+    this.totalSize$ = this.userFiles$.pipe(
+      map(files => files.reduce((total, file) => total + file.size, 0))
+    );
+    this.calculateTotalSizePercentage();
+
   
     this.userFiles$.subscribe(files => {
       console.log('User files:', files);
@@ -112,6 +127,52 @@ export class DashboardComponent implements OnInit{
     }, error => {
       console.error('Error fetching user files:', error);
     });
+  }
+
+  deleteFile(file: FileUpload): void {
+    const confirmDelete = window.confirm(`Are you sure you want to delete this file: ${file.name}`);
+    if (!confirmDelete) {
+      return;
+    }
+
+    const fileRef = this.storage.ref(`uploads/${file.name}`);
+    fileRef.delete().subscribe(() => {
+      console.log('File deleted successfully from storage');
+      this.db.collection<FileUpload>('uploads', ref => ref.where('name', '==', file.name)).get().toPromise().then(querySnapshot => {
+        querySnapshot!.forEach(doc => {
+          doc.ref.delete().then(() => {
+            console.log('File metadata deleted from Firestore');
+            // Refresh the list of user files
+            this.getUserFiles();
+          }).catch(error => {
+            console.error('Error deleting file metadata from Firestore', error);
+          });
+        });
+      }).catch(error => {
+        console.error('Error getting file metadata from Firestore', error);
+      });
+    }, error => {
+      console.error('Error deleting file from storage', error);
+    });
+}
+
+  copyLink(link: string): void {
+    const textarea = document.createElement('textarea');
+    textarea.value = link;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('Link copied to clipboard!');
+  }
+
+  calculateTotalSizePercentage(): Observable<string> {
+    return this.totalSize$.pipe(
+      map(totalSize => {
+        const percentage = (totalSize / this.MAX_STORAGE_SIZE) * 100;
+        return `${percentage.toFixed(2)}%`;
+      })
+    );
   }
 }
 

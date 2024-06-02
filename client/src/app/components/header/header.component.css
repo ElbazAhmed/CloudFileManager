@@ -10,6 +10,16 @@
 .navbar_title{
     font-size: large;
     font-weight: bold;
+    display: flex;
+    gap: 40px;
+}
+.navbar_title1{
+    font-size: medium;
+    font-weight: normal;
+    cursor: pointer;
+}
+.navbar_title1:hover{
+    color: var(--first-color);
 }
 .navbar_buttons{
     display: flex;

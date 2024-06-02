@@ -7,7 +7,7 @@
 .sidebar{
     width: 20%;
     height: 100%;
-    border-right: 1px #000 solid;
+    border-right: 1px rgba(0, 0, 0, 0.1) solid;
 }
 .content{
     width: 80%;
@@ -18,6 +18,86 @@
     align-items: center;
 }
 .sidebarTitle{
-    
+    padding: 10px 10px;
+    background-color: var(--first-color);
+    color: white;
 }
+.file_div{
+    padding: 10px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px rgba(0, 0, 0, 0.1) solid;
+}
+.file_div-icon{
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.file_div-icons{
+    display: flex;
+    gap: 5px;
+}
+.files-container{
+    max-height: 100%;
+    overflow-y: auto;
+}
+.file-input-container{
+    position: relative;
+    width: 60%;
+    height: 300px;
+    overflow: hidden;
+    background-color: #fff;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    line-height: 50px;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    box-shadow: 0px 5px 20px 0px rgb(69 67 96 / 10%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.file-input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+.upload-button{
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 5px;
+    margin: 15px 0px;
+}
+.upload-logo{
+    width: 120px;
+}
+.filename{
+    color: var(--first-color);
+}
+.progress {
+    height: 20px;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    overflow: hidden;
+    border: 1px rgba(0, 0, 0, 0.1) solid;
+    width: 500px;
+    margin: 15px 0; 
+  }
+  .progress-bar {
+    height: 100%;
+    background-color: var(--first-color);
+    text-align: center;
+    line-height: 20px;
+    color: white;
+  }
+
 
